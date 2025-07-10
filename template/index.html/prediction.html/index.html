@@ -35,7 +35,7 @@
 
     /* Background section with flower/pollen image */
     .bg-section {
-      background: url('https://cdn.pixabay.com/photo/2016/03/27/22/16/pollen-1281831_1280.jpg') no-repeat center center/cover;
+      background: url("image.jpg") no-repeat center center/cover;
       height: calc(100vh - 70px);
       display: flex;
       flex-direction: column;
@@ -98,10 +98,11 @@
       <i class="fas fa-cloud-upload-alt"></i>
     </div>
 
-    <form class="upload-form" enctype="multipart/form-data">
-      <input type="file" class="form-control" />
-      <button type="submit" class="btn btn-light">Submit</button>
-    </form>
+    <form action="{{ url_for('predict') }}" method="POST" enctype="multipart/form-data">
+  <input type="file" class="form-control" name="pc_image" required />
+  <button type="submit" class="btn btn-light">Submit</button>
+</form>
+
 
     <div class="result-text">The pollen grain type is</div>
   </div>
