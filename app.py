@@ -1,46 +1,28 @@
-from flask import Flask, render_template, request
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import numpy as np
-import os
-
-app = Flask(__name__)
-model = load_model('cnn.weight.h5')
 
 
-class_names = ['urochloa', 'brachiaria', 'panicum', 'setaria']
+model = load_model('C:/Users/Nirma/Downloads/model.h5')
 
-@app.route('/')
-def home():
-    return render_template('index.html')
 
-@app.route('/prediction.html')
-def predict_page():
-    return render_template('prediction.html', result='')
+img_path = 'C:/Users/Nirma/Downloads/pollen_data/eucalipto_23.jpg'
+img = load_img(img_path, color_mode='grayscale', target_size=(128, 128))  
+x = img_to_array(img) / 255.0
+x = np.expand_dims(x, axis=0)  
+print("Image shape:", x.shape)  
 
-@app.route('/logout.html')
-def logout():
-    return render_template('logout.html')
+probs = model.predict(x)[0]
+predicted_index = np.argmax(probs)
 
-@app.route('/result', methods=['POST'])
-def result():
-    if 'file' not in request.files:
-        return 'No file uploaded.', 400
 
-    file = request.files['file']
-    if file.filename == '':
-        return 'No selected file.', 400
+labels = [
+    'anadenanthera', 'arecaceae', 'arrabidaea', 'cecropia', 'chromolaena',
+    'combretum', 'croton', 'dipteryx', 'eucalipto', 'faramea', 'hyptis', 'mabea',
+    'matayba', 'mimosa', 'myrcia', 'protium', 'qualea', 'schinus',
+    'senegalia', 'serjania', 'syagrus', 'tridax', 'urochloa'
+]
 
-    filepath = os.path.join('static', file.filename)
-    file.save(filepath)
-
-   
-    img = load_img(filepath, target_size=(128, 128)) 
-    x = img_to_array(img)
-    x = np.expand_dims(x, axis=0) / 255.0
-
-    prediction = model.predict(x)
-    predicted_class = class_names[np.argmax(prediction)]
-
-    return render_template('prediction.html', result=predicted_class)
-
+# === Output ===
+print("Prediction probabilities:", probs)  
+print("Predicted label:", labels[predicted_index])
