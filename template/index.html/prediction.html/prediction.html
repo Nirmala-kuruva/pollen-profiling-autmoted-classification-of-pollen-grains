@@ -115,10 +115,12 @@
       <i class="fas fa-cloud-upload-alt"></i>
     </div>
 
-    <form class="upload-form" enctype="multipart/form-data">
-      <input type="file" class="form-control" />
-      <button type="submit" class="btn btn-light">Submit</button>
-    </form>
+    <form class="upload-form" action="/result" method="POST" enctype="multipart/form-data">
+  <input type="file" class="form-control" name="image" required />
+  <button type="submit" class="btn btn-light">Submit</button>
+</form>
+
+     
 
     <div class="result-text">The pollen grain type is</div>
   </div>
